@@ -1,3 +1,9 @@
+> ### All data structures implementations
+>
+> For a list of all the data structures I have implemented, click [here](https://gist.github.com/contactsunny/4a97886c7da57461efa8cd2538a49dbc).
+
+---
+
 # Double Linked List Implementation POC in Java
 
 This is a simple example of a double linked list implementation in Java. We create a custom ```Node``` class which can take values of
