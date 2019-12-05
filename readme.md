@@ -2,7 +2,7 @@
 
 This is a simple example of a double linked list implementation in Java. We create a custom ```Node``` class which can take values of
 generic type ```T```, so that we can create linked lists of different types using the same implementation class. We also create a 
-```LinkedList``` class which will hold the actual linked list of nodes.
+```DoubleLinkedList``` class which will hold the actual linked list of nodes.
 
 We provide various functions for our linked list such as:
 - add a node to the head of the linked list
