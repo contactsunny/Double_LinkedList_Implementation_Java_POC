@@ -5,12 +5,16 @@ public class DoubleLinkedList<T> {
     private Node<T> head;
     private Node<T> tail;
 
+    public void addToEmptyList(T value) {
+        this.head = new Node<T>();
+        this.head.setData(value);
+        this.tail = this.head;
+    }
+
     public void push(T value) {
 
         if (this.head == null) {
-            this.head = new Node<T>();
-            this.head.setData(value);
-            this.tail = this.head;
+            this.addToEmptyList(value);
         } else {
             Node<T> newNode = new Node<T>();
             newNode.setData(value);
@@ -63,9 +67,7 @@ public class DoubleLinkedList<T> {
     public void addToTail(T value) {
 
         if (this.head == null) {
-            this.head = new Node<T>();
-            this.head.setData(value);
-            this.tail = this.head;
+            this.addToEmptyList(value);
         } else {
             Node<T> newNode = new Node<T>();
             newNode.setData(value);
@@ -80,20 +82,18 @@ public class DoubleLinkedList<T> {
 
         if (this.head != null) {
             Node<T> currentNode = this.head;
-            Node<T> previousNode = this.head;
 
             while (currentNode != null) {
                 if (currentNode.getData() == value) {
-                    previousNode.setNext(currentNode.getNext());
+                    currentNode.getPrevious().setNext(currentNode.getNext());
 
                     if (currentNode.getNext() != null) {
-                        currentNode.getNext().setPrevious(previousNode);
+                        currentNode.getNext().setPrevious(currentNode.getPrevious());
                     }
 
                     System.out.println("Deleted first node with value " + value);
                     break;
                 } else {
-                    previousNode = currentNode;
                     currentNode = currentNode.getNext();
                 }
             }
@@ -103,24 +103,12 @@ public class DoubleLinkedList<T> {
     public void addAfterIndex(T value, int index) {
 
         if (this.head == null) {
-            this.head = new Node<T>();
-            this.head.setData(value);
-            this.tail = this.head;
+            this.addToEmptyList(value);
         } else {
 
-            int nodeIndex = 0;
+            Node<T> currentNode = this.getNodeAtIndex(index);
 
-            Node<T> currentNode = this.head;
-
-            while (index > nodeIndex) {
-                if (currentNode.getNext() != null) {
-                    currentNode = currentNode.getNext();
-                }
-
-                nodeIndex++;
-            }
-
-            if (nodeIndex == index) {
+            if (currentNode != null) {
                 Node<T> newNode = new Node<T>();
                 newNode.setData(value);
                 newNode.setNext(currentNode.getNext());
@@ -137,39 +125,46 @@ public class DoubleLinkedList<T> {
 
     public void deleteNodeAtIndex(int index) {
 
-        if (this.head != null) {
+        Node<T> currentNode = this.getNodeAtIndex(index);
 
-            int nodeIndex = 0;
+        if (currentNode != null) {
 
-            Node<T> currentNode = this.head;
-            Node<T> previousNode = this.head;
-
-            while (nodeIndex != index) {
-
-                previousNode = currentNode;
-
-                if (currentNode.getNext() != null) {
-                    currentNode = currentNode.getNext();
-                }
-
-                nodeIndex++;
-            }
-
-            previousNode.setNext(currentNode.getNext());
+            currentNode.getPrevious().setNext(currentNode.getNext());
 
             if (currentNode.getNext() != null) {
-                currentNode.getNext().setPrevious(previousNode);
+                currentNode.getNext().setPrevious(currentNode.getPrevious());
             }
         }
     }
 
     public void deleteNodeAfterIndex(int index) {
 
+        Node<T> currentNode = this.getNodeAtIndex(index);
+
+        if (currentNode != null) {
+
+            if (currentNode.getNext() != null) {
+
+                if (currentNode.getNext().getNext() != null) {
+                    currentNode.getNext().getNext().setPrevious(currentNode);
+                }
+
+                currentNode.setNext(currentNode.getNext().getNext());
+            } else {
+                currentNode.setNext(null);
+            }
+        }
+    }
+
+    private Node<T> getNodeAtIndex(int index) {
+
+        Node<T> currentNode = null;
+
         if (this.head != null) {
 
             int nodeIndex = 0;
 
-            Node<T> currentNode = this.head;
+            currentNode = this.head;
 
             while (nodeIndex != index) {
 
@@ -179,19 +174,8 @@ public class DoubleLinkedList<T> {
 
                 nodeIndex++;
             }
-
-            if (currentNode.getNext() != null) {
-
-                Node<T> nodeToBeDeleted = currentNode.getNext();
-
-                currentNode.setNext(nodeToBeDeleted.getNext());
-
-                if (nodeToBeDeleted.getNext() != null) {
-                    nodeToBeDeleted.getNext().setPrevious(nodeToBeDeleted.getPrevious());
-                }
-            } else {
-                currentNode.setNext(null);
-            }
         }
+
+        return currentNode;
     }
 }
